@@ -33,3 +33,9 @@
   font-size: 16px;
   margin-left: auto;
 }
+
+.active {
+  color: beige;
+  font-weight: bold;
+  
+}
