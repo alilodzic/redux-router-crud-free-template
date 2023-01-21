@@ -14,11 +14,22 @@ export const dataFetch = createAsyncThunk('data/dataFetch', async (_, thunkAPI) 
     }
 })
 
+export const postFetch = createAsyncThunk('data/postFetch', async (id, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI
+    try {
+        const res = await fetch(`http://localhost:3005/data/${id}`,);
+        const data = await res.json()
+        console.log(data)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
 
 export const deleteData = createAsyncThunk("data/deleteData", async (id, thunkAPI) => {
     const { rejectWithValue } = thunkAPI
     try {
-        const res = await fetch(`http://localhost:3005/data/${id}`, {
+        await fetch(`http://localhost:3005/data/${id}`, {
             method: "DELETE",
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'
@@ -49,11 +60,31 @@ export const insertData = createAsyncThunk("data/insertData", async (item, thunk
 
 })
 
+export const updatetData = createAsyncThunk("data/updatetData", async (item, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI
+    console.log(item)
+    try {
+        const res = await fetch(`http://localhost:3005/data/${item.id}`, {
+            method: "PATCH",
+            body: JSON.stringify(item),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+        });
+        const data = await res.json()
+        return data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+
+})
+
 export const dataslice = createSlice({
     name: "data",
     initialState: {
         data: [],
-        loading: true,
+        record: null,
+        loading: false,
         error: null
     },
     reducers: {},
@@ -88,6 +119,37 @@ export const dataslice = createSlice({
             state.loading = false
             state.error = action.payload
         });
+        //----------------------------update data--------------------//
+
+        builder.addCase(updatetData.pending, (state) => {
+            state.loading = true
+            state.error = null
+        });
+        builder.addCase(updatetData.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+            state.record = action.payload
+        });
+        builder.addCase(updatetData.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        });
+        //----------------------------fetch record--------------------//
+
+        builder.addCase(postFetch.pending, (state) => {
+            state.loading = true
+            state.error = null
+            state.record = null
+        });
+        builder.addCase(postFetch.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+            state.record = action.payload
+        });
+        builder.addCase(postFetch.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        });
 
         //------------------------delete data---------------------//
 
@@ -110,6 +172,5 @@ export const dataslice = createSlice({
     },
 })
 
-export const { increment } = dataslice.actions
 
 export default dataslice.reducer

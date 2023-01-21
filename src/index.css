@@ -39,3 +39,8 @@
   font-weight: bold;
   
 }
+
+#error-page {
+  text-align: center;
+  margin: 30px;
+}

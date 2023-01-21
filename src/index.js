@@ -12,6 +12,18 @@ import ErrorPage from "./components/Error";
 import Add from "./components/Add";
 import store from './store/store'
 import { Provider } from 'react-redux'
+import Details from "./components/Details";
+import Edit from "./components/Edit";
+
+const filterParms =({ params }) => {
+  if (isNaN(params.id)) {
+    throw new Response("bad request", {
+      statusText: "please make sure to insert correct post ID",
+      status: 400,
+    })
+  }
+}
+
 
 const router = createBrowserRouter([
   {
@@ -24,8 +36,19 @@ const router = createBrowserRouter([
         element: <Index />
       },
       {
+        path: "post/:id",
+        element: <Details />,
+        loader: filterParms
+      },
+      {
         path: "add",
         element: <Add />,
+      },
+      {
+        path: "post/:id/edit",
+        element: <Edit />,
+        loader: filterParms
+
       }
     ]
   },
