@@ -33,13 +33,13 @@ const Add = () => {
                 <Form.Control type="text" placeholder="Enter title" size="lg" value={title} onChange={(e) => setTitle(e.target.value)} />
             </Form.Group>
 
-            <Loading loading={loading} error={error} >
             <div className="d-grid gap-2 mt-4" >
+            <Loading loading={loading} error={error} >
                 <Button variant="secondary" size="lg" type="submit">
                     Submit
                 </Button>
-                </div>
                 </Loading>
+                </div>
         </Form>
     )
 }

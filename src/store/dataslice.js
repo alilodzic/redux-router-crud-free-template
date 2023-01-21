@@ -53,7 +53,7 @@ export const dataslice = createSlice({
     name: "data",
     initialState: {
         data: [],
-        loading: false,
+        loading: true,
         error: null
     },
     reducers: {},
